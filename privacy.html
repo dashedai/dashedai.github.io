@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy — DashAI</title>
+<meta name="description" content="DashAI Privacy Policy. Your data never leaves your device. We collect nothing.">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
+<style>
+:root{--bg:#0e0820;--surf:rgba(255,255,255,.04);--bd:rgba(255,255,255,.08);--bds:rgba(255,255,255,.14);--tx:#f0eeff;--sub:rgba(240,238,255,.5);--sub2:rgba(240,238,255,.25);--ac:#a78bfa;--ac2:#c4b5fd;--acg:rgba(167,139,250,.12);--acgb:rgba(167,139,250,.25);--green:#34d399}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);line-height:1.75;overflow-x:hidden}
+.loader{position:relative;border-radius:50%;flex-shrink:0;perspective:800px}
+.inner{position:absolute;box-sizing:border-box;width:100%;height:100%;border-radius:50%}
+.inner.one{animation:rotate-one 1s linear infinite;border-bottom:3px solid #c4b5fd}
+.inner.two{animation:rotate-two 1s linear infinite;border-right:3px solid #c4b5fd}
+.inner.three{animation:rotate-three 1s linear infinite;border-top:3px solid #c4b5fd}
+@keyframes rotate-one{0%{transform:rotateX(35deg) rotateY(-45deg) rotateZ(0deg)}100%{transform:rotateX(35deg) rotateY(-45deg) rotateZ(360deg)}}
+@keyframes rotate-two{0%{transform:rotateX(50deg) rotateY(10deg) rotateZ(0deg)}100%{transform:rotateX(50deg) rotateY(10deg) rotateZ(360deg)}}
+@keyframes rotate-three{0%{transform:rotateX(35deg) rotateY(55deg) rotateZ(0deg)}100%{transform:rotateX(35deg) rotateY(55deg) rotateZ(360deg)}}
+.s24{width:24px;height:24px}
+nav{position:fixed;top:0;left:0;right:0;z-index:999;height:60px;display:flex;align-items:center;padding:0 32px;gap:12px;background:rgba(14,8,32,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--bd)}
+.nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-wordmark{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;background:linear-gradient(130deg,var(--tx) 30%,var(--ac));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-gap{flex:1}
+.back-btn{display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;background:var(--surf);border:1px solid var(--bd);color:var(--sub);font-size:.82rem;text-decoration:none;transition:.15s}
+.back-btn:hover{color:var(--tx);border-color:var(--bds)}
+.back-btn .material-symbols-outlined{font-size:16px}
+
+.page{max-width:760px;margin:0 auto;padding:100px 24px 80px}
+.page-hed{margin-bottom:48px}
+.pg-label{font-size:.68rem;text-transform:uppercase;letter-spacing:2px;color:var(--ac);font-weight:700;margin-bottom:10px}
+.pg-title{font-family:'Syne',sans-serif;font-size:clamp(2rem,5vw,3rem);font-weight:800;letter-spacing:-.03em;line-height:1.1;margin-bottom:16px}
+.pg-meta{font-size:.8rem;color:var(--sub2)}
+
+/* zero-data callout */
+.zero-card{background:rgba(52,211,153,.05);border:1px solid rgba(52,211,153,.2);border-radius:16px;padding:24px 28px;margin-bottom:48px;display:flex;gap:16px;align-items:flex-start}
+.zero-icon{width:40px;height:40px;border-radius:10px;background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.zero-icon .material-symbols-outlined{font-size:20px;color:var(--green)}
+.zero-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:var(--green);margin-bottom:4px}
+.zero-text{font-size:.84rem;color:rgba(52,211,153,.7);line-height:1.7}
+
+/* content */
+.prose h2{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:700;margin:40px 0 12px;padding-bottom:10px;border-bottom:1px solid var(--bd);color:var(--tx)}
+.prose h2:first-child{margin-top:0}
+.prose p{font-size:.88rem;color:var(--sub);margin-bottom:14px;line-height:1.8}
+.prose p strong{color:var(--tx);font-weight:600}
+.prose ul{margin-bottom:14px;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:6px}
+.prose ul li{font-size:.87rem;color:var(--sub);padding-left:20px;position:relative;line-height:1.7}
+.prose ul li::before{content:'▸';position:absolute;left:0;color:var(--ac);font-size:.6rem;top:5px}
+.prose a{color:var(--ac2);text-decoration:none;border-bottom:1px solid var(--acgb)}
+.prose a:hover{color:var(--tx)}
+
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.info-cell{background:var(--surf);border:1px solid var(--bd);border-radius:10px;padding:14px 16px}
+.info-cell-label{font-size:.65rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--sub2);font-weight:700;margin-bottom:4px}
+.info-cell-val{font-size:.84rem;color:var(--tx)}
+@media(max-width:500px){.info-grid{grid-template-columns:1fr}}
+
+footer{border-top:1px solid var(--bd);padding:32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.foot-links{display:flex;gap:18px;flex-wrap:wrap}
+.foot-link{font-size:.78rem;color:var(--sub2);text-decoration:none;transition:.14s}
+.foot-link:hover{color:var(--tx)}
+.foot-copy{font-size:.72rem;color:var(--sub2)}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-brand">
+    <div class="loader s24"><div class="inner one"></div><div class="inner two"></div><div class="inner three"></div></div>
+    <span class="nav-wordmark">DashAI</span>
+  </a>
+  <div class="nav-gap"></div>
+  <a href="index.html" class="back-btn"><span class="material-symbols-outlined">arrow_back</span>Back to Home</a>
+</nav>
+
+<div class="page">
+  <div class="page-hed">
+    <div class="pg-label">Legal</div>
+    <h1 class="pg-title">Privacy Policy</h1>
+    <p class="pg-meta">Last updated: March 12, 2026 &nbsp;·&nbsp; Effective immediately</p>
+  </div>
+
+  <div class="zero-card">
+    <div class="zero-icon"><span class="material-symbols-outlined">verified_user</span></div>
+    <div>
+      <div class="zero-title">The short version: we collect nothing.</div>
+      <div class="zero-text">DashAI is a fully client-side application. There is no server, no database, no analytics pipeline. Every word you type stays on your device. This privacy policy exists to be thorough and transparent — not because there is anything complex to disclose.</div>
+    </div>
+  </div>
+
+  <div class="info-grid">
+    <div class="info-cell"><div class="info-cell-label">Service Name</div><div class="info-cell-val">DashAI</div></div>
+    <div class="info-cell"><div class="info-cell-label">Type</div><div class="info-cell-val">Static Web Application</div></div>
+    <div class="info-cell"><div class="info-cell-label">Data Collected</div><div class="info-cell-val">None</div></div>
+    <div class="info-cell"><div class="info-cell-label">Third-Party Sharing</div><div class="info-cell-val">None</div></div>
+  </div>
+
+  <div class="prose">
+
+    <h2>1. Who We Are</h2>
+    <p>DashAI is a browser-based AI assistant that runs AI language models locally on your device using WebGPU technology. The application is delivered as static web files — HTML, CSS, and JavaScript — with no back-end server or cloud infrastructure.</p>
+
+    <h2>2. Information We Collect</h2>
+    <p><strong>We collect no personal information whatsoever.</strong> Specifically, DashAI does not collect, store, transmit, or process:</p>
+    <ul>
+      <li>Your name, email address, or any account information (there are no accounts)</li>
+      <li>Your conversation messages or chat history</li>
+      <li>Your IP address or location data</li>
+      <li>Device identifiers, browser fingerprints, or hardware information</li>
+      <li>Usage statistics, session data, or behavioral analytics</li>
+      <li>Any cookies (we do not set cookies)</li>
+    </ul>
+
+    <h2>3. How the Application Works</h2>
+    <p>DashAI uses WebLLM, an open-source library that runs large language model inference entirely within your browser using the WebGPU API. When you select a model:</p>
+    <ul>
+      <li>The model weights are downloaded from a CDN (<code style="font-size:.78em;background:rgba(255,255,255,.06);padding:1px 6px;border-radius:4px">cdn.jsdelivr.net</code>) directly to your browser's cache</li>
+      <li>All AI inference happens locally on your GPU — no request is ever sent to an AI API</li>
+      <li>Conversation history exists only in your browser's RAM for the duration of the session</li>
+      <li>When you close the tab, all conversation data is gone permanently</li>
+    </ul>
+    <p>Your conversation content is <strong>never transmitted anywhere</strong> — not to us, not to any AI provider, not to any third party.</p>
+
+    <h2>4. Local Storage</h2>
+    <p>DashAI uses your browser's <code style="font-size:.78em;background:rgba(255,255,255,.06);padding:1px 6px;border-radius:4px">localStorage</code> for one purpose only: remembering which AI model you last selected, so you don't have to re-choose it on your next visit. This data:</p>
+    <ul>
+      <li>Contains only the model identifier string (e.g., "Llama-3.2-1B-Instruct-q4f16_1-MLC")</li>
+      <li>Never leaves your device</li>
+      <li>Can be cleared at any time via your browser settings or the DashAI settings panel</li>
+    </ul>
+
+    <h2>5. Third-Party Services</h2>
+    <p>DashAI loads the following external resources at startup. These services have their own privacy policies:</p>
+    <ul>
+      <li><strong>Google Fonts</strong> (fonts.googleapis.com) — serves web fonts. Google may log your IP address as part of their CDN infrastructure.</li>
+      <li><strong>jsDelivr CDN</strong> (cdn.jsdelivr.net) — serves the WebLLM library and AI model weights. jsDelivr may log standard CDN access data.</li>
+      <li><strong>Cloudflare CDN</strong> (cdnjs.cloudflare.com) — serves the Prism.js syntax highlighting library.</li>
+      <li><strong>unpkg.com</strong> — serves React and Babel libraries.</li>
+    </ul>
+    <p>After initial load, DashAI can operate entirely offline. None of these services receive your conversation content.</p>
+
+    <h2>6. Advertising</h2>
+    <p>DashAI may display advertisements served by Google AdSense or similar networks. Ad networks may use cookies and collect data according to their own privacy policies. We encourage you to review <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's Privacy Policy</a> for details on how ad personalization works. You can opt out of personalized ads at <a href="https://adssettings.google.com" target="_blank" rel="noopener">adssettings.google.com</a>.</p>
+
+    <h2>7. Children's Privacy</h2>
+    <p>DashAI is not directed at children under 13 years of age, and we do not knowingly collect any information from children. Since we collect no information from anyone, no special provisions are necessary — but we state this explicitly for compliance with COPPA and similar regulations.</p>
+
+    <h2>8. Your Rights</h2>
+    <p>Because we do not collect, store, or process any personal data, standard data subject rights (access, deletion, portability, correction) do not apply in the traditional sense — there is simply no data about you for us to provide, delete, or export. Your data lives only on your device, under your full control.</p>
+    <p>If you wish to delete your locally stored model preference, clear your browser's localStorage for this site via your browser settings.</p>
+
+    <h2>9. Data Security</h2>
+    <p>Your data is as secure as your own device, because that is the only place it exists. We do not transmit data, so there is no transmission to intercept. There is no DashAI server that could be breached.</p>
+
+    <h2>10. Changes to This Policy</h2>
+    <p>If we ever change how DashAI works in a way that affects privacy (for example, if we were to add server-side features), we would update this page and revise the "Last updated" date above. We recommend checking this page periodically.</p>
+
+    <h2>11. Contact</h2>
+    <p>If you have questions about this privacy policy or DashAI's data practices, please reach out. Because DashAI is a static application with no accounts, we cannot respond to data subject requests — but we're happy to answer questions about how the application works.</p>
+    <p>Contact: <a href="mailto:privacy@dashai.app">privacy@dashai.app</a></p>
+
+  </div>
+</div>
+
+<footer>
+  <div class="foot-links">
+    <a href="index.html" class="foot-link">Home</a>
+    <a href="app.html" class="foot-link">App</a>
+    <a href="privacy.html" class="foot-link">Privacy Policy</a>
+  </div>
+  <span class="foot-copy">© 2026 DashAI. All rights reserved.</span>
+</footer>
+
+</body>
+</html>
