@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — DashAI</title>
+<meta name="description" content="About DashAI — a fully private, on-device AI assistant built on open-weight models and WebGPU. No cloud, no accounts, no data collection.">
+<link rel="canonical" href="https://dashai.app/about.html">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
+<link rel="stylesheet" href="pages.css">
+<style>
+.timeline{display:flex;flex-direction:column;gap:0;margin-top:32px}
+.tl-item{display:flex;gap:20px;padding-bottom:28px;position:relative}
+.tl-item:last-child{padding-bottom:0}
+.tl-item:not(:last-child)::after{content:'';position:absolute;left:19px;top:40px;bottom:0;width:1px;background:var(--bd)}
+.tl-dot{width:40px;height:40px;border-radius:50%;background:var(--acg);border:1px solid var(--acgb);display:flex;align-items:center;justify-content:center;flex-shrink:0;z-index:1}
+.tl-dot .material-symbols-outlined{font-size:18px;color:var(--ac2)}
+.tl-body{padding-top:8px}
+.tl-title{font-family:'Syne',sans-serif;font-size:.92rem;font-weight:700;margin-bottom:5px}
+.tl-text{font-size:.83rem;color:var(--sub);line-height:1.7}
+.mission-quote{border-left:3px solid var(--acgb);padding:16px 22px;margin:28px 0;background:var(--acg);border-radius:0 10px 10px 0}
+.mission-quote p{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:600;line-height:1.5;color:var(--tx);margin:0}
+.mission-quote cite{font-size:.75rem;color:var(--sub2);display:block;margin-top:8px;font-style:normal}
+.open-source-note{display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:10px;background:rgba(52,211,153,.05);border:1px solid rgba(52,211,153,.2);font-size:.82rem;color:rgba(52,211,153,.8);margin-top:16px}
+.open-source-note .material-symbols-outlined{font-size:16px;flex-shrink:0}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-brand">
+    <div class="loader s24"><div class="inner one"></div><div class="inner two"></div><div class="inner three"></div></div>
+    <span class="nav-wordmark">DashAI</span>
+  </a>
+  <div class="nav-gap"></div>
+  <div class="nav-links">
+    <a href="about.html" class="nav-link active">About</a>
+    <a href="privacy.html" class="nav-link">Privacy</a>
+    <a href="terms.html" class="nav-link">Terms</a>
+    <a href="contact.html" class="nav-link">Contact</a>
+  </div>
+</nav>
+
+<div class="page-wide">
+
+  <!-- Hero -->
+  <div class="about-hero">
+    <div style="display:flex;justify-content:center;margin-bottom:28px">
+      <div class="loader" style="width:80px;height:80px;perspective:800px">
+        <div class="inner one" style="border-bottom-color:#c4b5fd"></div>
+        <div class="inner two" style="border-right-color:#c4b5fd"></div>
+        <div class="inner three" style="border-top-color:#c4b5fd"></div>
+      </div>
+    </div>
+    <div class="pg-label" style="text-align:center">About DashAI</div>
+    <h1 class="pg-title" style="text-align:center">AI that belongs<br>to <em>you.</em></h1>
+    <p class="pg-meta" style="text-align:center;max-width:480px;margin:0 auto">DashAI is an on-device AI assistant built on open-weight models and WebGPU. No cloud, no accounts, no data leaving your machine.</p>
+  </div>
+
+  <!-- Mission quote -->
+  <div class="mission-quote">
+    <p>"We believe powerful AI should be a tool you own — not a service you subscribe to, a server you depend on, or a company that reads your conversations."</p>
+    <cite>— The DashAI team, Austria</cite>
+  </div>
+
+  <!-- What DashAI is -->
+  <div style="margin-bottom:56px">
+    <div class="pg-label">What We Built</div>
+    <h2 style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;letter-spacing:-.02em;margin-bottom:16px">A fully <em style="-webkit-text-fill-color:transparent;background:linear-gradient(130deg,#c4b5fd,#e9d5ff);-webkit-background-clip:text">local</em> AI assistant</h2>
+    <p style="font-size:.9rem;color:var(--sub);line-height:1.8;max-width:640px;margin-bottom:20px">DashAI runs large language models directly inside your browser tab using the WebGPU API. When you send a message, the response is generated entirely on your own GPU — no request leaves your device, no API is called, no server exists.</p>
+    <p style="font-size:.9rem;color:var(--sub);line-height:1.8;max-width:640px">It's the same technology that powers native AI applications, brought into the browser through open-source work by the <a href="https://github.com/mlc-ai/web-llm" target="_blank" rel="noopener" style="color:var(--ac2);border-bottom:1px solid var(--acgb);text-decoration:none">WebLLM project</a> and quantised open-weight models from Meta AI.</p>
+
+    <div class="open-source-note">
+      <span class="material-symbols-outlined">lock_open</span>
+      DashAI is built entirely on open-source foundations — WebLLM, React, Prism.js, and open-weight AI models released under public licences.
+    </div>
+  </div>
+
+  <!-- Values grid -->
+  <div style="margin-bottom:56px">
+    <div class="pg-label">Our Values</div>
+    <h2 style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;letter-spacing:-.02em;margin-bottom:32px">What we stand for</h2>
+    <div class="about-values">
+      <div class="value-card">
+        <div class="value-icon">🔒</div>
+        <h3>Privacy by Architecture</h3>
+        <p>We didn't bolt privacy on as a feature — we made it structurally impossible to violate. There is no server. There is no database. There is nothing to breach.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">⚡</div>
+        <h3>Open-Weight Models</h3>
+        <p>DashAI uses open-weight AI models — model parameters that are publicly released and auditable by anyone. No black-box APIs, no proprietary lock-in.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">🌍</div>
+        <h3>Accessible AI</h3>
+        <p>Free, no account required, no subscription. If you have a modern browser and a GPU, you have access to powerful AI. That should be for everyone.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">📖</div>
+        <h3>Transparency</h3>
+        <p>Our privacy policy is honest: we collect nothing because there's nothing to collect. Our terms are plain-language. We tell you exactly what runs and why.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">🇦🇹</div>
+        <h3>EU-Based &amp; GDPR-Aligned</h3>
+        <p>DashAI is operated from Austria, European Union. We hold ourselves to EU data protection standards — the highest in the world — even though we collect no data.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">🛠️</div>
+        <h3>Built for Real Use</h3>
+        <p>Multi-tab chats, syntax-highlighted code, smart link opening, offline operation. DashAI is designed as a tool you'd actually reach for every day.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- How it's built -->
+  <div style="margin-bottom:56px">
+    <div class="pg-label">Technology</div>
+    <h2 style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;letter-spacing:-.02em;margin-bottom:20px">How DashAI works</h2>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot"><span class="material-symbols-outlined">public</span></div>
+        <div class="tl-body">
+          <div class="tl-title">You open DashAI in your browser</div>
+          <div class="tl-text">The page loads static HTML, CSS, and JavaScript files. No account, no login, no tracking pixel. Google Fonts, Prism.js, and React are loaded from CDNs.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"><span class="material-symbols-outlined">download</span></div>
+        <div class="tl-body">
+          <div class="tl-title">You choose an open-weight model</div>
+          <div class="tl-text">The model weights (e.g. Llama 3.2 1B, ~700 MB) are downloaded from jsDelivr CDN or Hugging Face directly to your browser's cache. This happens once — subsequent visits use the cached version. Hugging Face may log standard CDN access data (IP, browser) for this download.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"><span class="material-symbols-outlined">memory</span></div>
+        <div class="tl-body">
+          <div class="tl-title">WebLLM loads the model onto your GPU</div>
+          <div class="tl-text">WebLLM — an open-source library from the MLC AI project — uses the WebGPU API to load the quantised model weights into your GPU's VRAM. This is the same approach used by native AI desktop apps, adapted for the browser.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"><span class="material-symbols-outlined">chat</span></div>
+        <div class="tl-body">
+          <div class="tl-title">You chat — entirely offline</div>
+          <div class="tl-text">Every token of every response is generated locally on your hardware. No network request is made. You can now disconnect your internet entirely and DashAI keeps working.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"><span class="material-symbols-outlined">delete</span></div>
+        <div class="tl-body">
+          <div class="tl-title">Tab closed → all data gone</div>
+          <div class="tl-text">Conversation history lives only in browser RAM. When you close the tab, it's gone. The only thing that persists is your model choice in localStorage — one string, on your device only.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tech stack -->
+  <div style="margin-bottom:56px">
+    <div class="pg-label">Open-Source Stack</div>
+    <h2 style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;letter-spacing:-.02em;margin-bottom:16px">Built on open foundations</h2>
+    <p style="font-size:.88rem;color:var(--sub);line-height:1.8;max-width:580px;margin-bottom:20px">DashAI is assembled from open-source tools and open-weight models. We're standing on the shoulders of brilliant open-source contributors.</p>
+    <div class="tech-stack">
+      <span class="tech-pill">WebLLM</span>
+      <span class="tech-pill">WebGPU</span>
+      <span class="tech-pill">React 18</span>
+      <span class="tech-pill">Llama 3.x</span>
+      <span class="tech-pill">Prism.js</span>
+      <span class="tech-pill">jsDelivr CDN</span>
+      <span class="tech-pill">Hugging Face</span>
+      <span class="tech-pill">Google Fonts</span>
+      <span class="tech-pill">Syne Typeface</span>
+      <span class="tech-pill">DM Sans</span>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="callout purple" style="text-align:center;justify-content:center;flex-direction:column;align-items:center">
+    <div style="display:flex;justify-content:center;margin-bottom:16px">
+      <div class="callout-icon" style="margin:0"><span class="material-symbols-outlined">rocket_launch</span></div>
+    </div>
+    <div class="callout-title" style="margin-bottom:8px">Ready to try it?</div>
+    <div class="callout-text" style="margin-bottom:16px">No signup. No cloud. Just open the app and go.</div>
+    <a href="app.html" style="display:inline-flex;align-items:center;gap:7px;padding:10px 22px;border-radius:10px;background:var(--acgb);color:var(--ac2);font-size:.86rem;font-weight:600;text-decoration:none;transition:.16s" onmouseover="this.style.background='rgba(167,139,250,.35)'" onmouseout="this.style.background='var(--acgb)'">
+      <span class="material-symbols-outlined" style="font-size:16px">rocket_launch</span>
+      Launch DashAI
+    </a>
+  </div>
+
+</div>
+
+<footer>
+  <div class="foot-brand">
+    <div class="loader s24"><div class="inner one"></div><div class="inner two"></div><div class="inner three"></div></div>
+    <span class="foot-wordmark">DashAI</span>
+  </div>
+  <div class="foot-links">
+    <a href="index.html" class="foot-link">Home</a>
+    <a href="app.html" class="foot-link">App</a>
+    <a href="about.html" class="foot-link">About</a>
+    <a href="privacy.html" class="foot-link">Privacy</a>
+    <a href="terms.html" class="foot-link">Terms</a>
+    <a href="contact.html" class="foot-link">Contact</a>
+  </div>
+  <span class="foot-copy">© 2026 DashAI · Austria, EU</span>
+</footer>
+
+</body>
+</html>
