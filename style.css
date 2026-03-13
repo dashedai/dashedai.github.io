@@ -322,6 +322,17 @@ body {
 .pfill { height:100%; background:var(--ac); transition:width .3s ease }
 .ldr-hint { font-size:.68rem; color:var(--sub2); text-align:center; max-width:230px }
 
+/* ── STREAMING WORD FADE (like Grok) ── */
+@keyframes wfIn {
+  from { opacity:0; filter:blur(6px); transform:translateY(2px) }
+  to   { opacity:1; filter:blur(0);   transform:translateY(0) }
+}
+.wf {
+  display:inline;
+  animation: wfIn 0.18s ease forwards;
+}
+.stream-bub { }
+
 /* Prism */
 code[class*="language-"],pre[class*="language-"] { background:transparent!important; text-shadow:none!important }
 .token.comment { color:#576070!important }
