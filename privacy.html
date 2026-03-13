@@ -3,45 +3,87 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Privacy Policy — DashAI</title>
-<link rel="stylesheet" href="pages.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+<link rel="stylesheet" href="style.css">
+<style>
+  /* page-only overrides */
+  html, body { overflow: auto; height: auto; min-height: 100%; }
+  .page-wrap { max-width: 560px; width: 100%; margin: 0 auto; padding: calc(var(--nav) + 32px) 18px 60px; }
+  .page-h1 { font-family: 'Syne', sans-serif; font-size: 1.45rem; font-weight: 800; margin-bottom: 4px; }
+  .page-meta { font-size: .75rem; color: var(--sub); margin-bottom: 28px; }
+  .page-meta a { color: var(--ac); text-decoration: none; }
+  .sec-title { font-size: .59rem; text-transform: uppercase; letter-spacing: 1.8px; color: var(--sub2); font-weight: 700; margin-bottom: 8px; }
+  .sp-card p { font-size: .8rem; color: var(--sub); line-height: 1.7; margin-bottom: 8px; }
+  .sp-card p:last-child { margin-bottom: 0; }
+  .sp-card p strong { color: var(--tx); font-weight: 600; }
+  .sp-card a { color: var(--ac); text-decoration: none; }
+  .sp-card a:hover { text-decoration: underline; }
+  .sp-sec { margin-bottom: 18px; }
+</style>
 </head>
 <body>
-<nav class="pnav"><a href="app.html" class="pnav-brand">DashAI</a><div class="pnav-gap"></div><a href="app.html" class="pnav-btn">← Open App</a></nav>
-<main class="page-main"><div class="page-body">
-<h1>Privacy Policy</h1>
-<p class="meta">Last updated: March 2026 · Austria / GDPR · <a href="mailto:stdksupport@proton.me">stdksupport@proton.me</a></p>
 
-<section>
-<h2>The short version</h2>
-<p>DashAI runs entirely on your device. Your conversations and images never reach our servers. We don't have a backend that receives your chats.</p>
-</section>
+<nav class="nav">
+  <a href="index.html" class="nav-brand" style="text-decoration:none">
+    <span class="wordmark">DashAI</span>
+  </a>
+  <div class="nav-gap"></div>
+  <a href="index.html" class="home-btn">
+    <span class="material-symbols-outlined">arrow_back</span>
+  </a>
+</nav>
 
-<section>
-<h2>What we collect</h2>
-<p><strong>Nothing you type or say.</strong> All AI inference happens locally via WebGPU in your browser.</p>
-<p><strong>Model files</strong> are downloaded once from Hugging Face CDN. Their servers log standard access data (IP, timestamp). See <a href="https://huggingface.co/privacy" target="_blank" rel="noopener">HuggingFace Privacy Policy</a>.</p>
-<p><strong>Ads:</strong> We display Google AdSense ads. Google may use cookies to personalise ads. You can opt out at <a href="https://adssettings.google.com" target="_blank" rel="noopener">adssettings.google.com</a>. See <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a>.</p>
-<p><strong>Local storage:</strong> Your chosen model ID and settings are saved in your browser's localStorage. This never leaves your device.</p>
-</section>
+<div class="page-wrap">
+  <h1 class="page-h1">Privacy Policy</h1>
+  <p class="page-meta">Last updated: March 2026 · Austria / GDPR · <a href="mailto:privacy@dashedai.com">privacy@dashedai.com</a></p>
 
-<section>
-<h2>Cookies</h2>
-<p>We set no first-party cookies. Google AdSense may set third-party cookies. You can block them in your browser settings.</p>
-</section>
+  <div class="sp-sec">
+    <div class="sec-title">The short version</div>
+    <div class="sp-card">
+      <p>DashAI runs entirely on your device. Your conversations and images never reach our servers. We don't have a backend that receives your chats.</p>
+    </div>
+  </div>
 
-<section>
-<h2>Your GDPR rights</h2>
-<p>Under GDPR (EU 2016/679) you have the right to access, correct, delete, or restrict processing of your personal data. Since we hold no conversational data, these rights mainly apply to AdSense data (contact Google) and support emails. To exercise a right, email <a href="mailto:stdksupport@proton.me">stdksupport@proton.me</a>. You may also file a complaint with the Austrian DSB: <a href="https://www.dsb.gv.at" target="_blank" rel="noopener">www.dsb.gv.at</a>.</p>
-</section>
+  <div class="sp-sec">
+    <div class="sec-title">What we collect</div>
+    <div class="sp-card">
+      <p><strong>Nothing you type or say.</strong> All AI inference happens locally via WebGPU in your browser.</p>
+      <p><strong>Model files</strong> are downloaded once from Hugging Face CDN. Their servers log standard access data (IP, timestamp). See <a href="https://huggingface.co/privacy" target="_blank" rel="noopener">HuggingFace Privacy Policy</a>.</p>
+      <p><strong>Ads:</strong> We display Google AdSense ads. Google may use cookies to personalise ads. You can opt out at <a href="https://adssettings.google.com" target="_blank" rel="noopener">adssettings.google.com</a>. See <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a>.</p>
+      <p><strong>Local storage:</strong> Your chosen model ID and settings are saved in your browser's localStorage. This never leaves your device.</p>
+    </div>
+  </div>
 
-<section>
-<h2>Copyright / Takedown</h2>
-<p>If you believe any content associated with DashAI infringes your rights, email <a href="mailto:stdksupport@proton.me">stdksupport@proton.me</a> — we will investigate and remove it as soon as possible. Please include a description of the material and your contact details.</p>
-</section>
+  <div class="sp-sec">
+    <div class="sec-title">Cookies</div>
+    <div class="sp-card">
+      <p>We set no first-party cookies. Google AdSense may set third-party cookies. You can block them in your browser settings.</p>
+    </div>
+  </div>
 
-<section>
-<h2>Changes</h2>
-<p>We may update this policy. Continued use after changes constitutes acceptance. This page always shows the current version.</p>
-</section>
-</div></main>
-</body></html>
+  <div class="sp-sec">
+    <div class="sec-title">Your GDPR rights</div>
+    <div class="sp-card">
+      <p>Under GDPR (EU 2016/679) you have the right to access, correct, delete, or restrict processing of your personal data. Since we hold no conversational data, these rights mainly apply to AdSense data (contact Google) and support emails.</p>
+      <p>To exercise a right, email <a href="mailto:privacy@dashedai.com">privacy@dashedai.com</a>. You may also file a complaint with the Austrian DSB: <a href="https://www.dsb.gv.at" target="_blank" rel="noopener">www.dsb.gv.at</a>.</p>
+    </div>
+  </div>
+
+  <div class="sp-sec">
+    <div class="sec-title">Copyright / Takedown</div>
+    <div class="sp-card">
+      <p>If you believe any content associated with DashAI infringes your rights, email <a href="mailto:privacy@dashedai.com">privacy@dashedai.com</a> with details and we will respond promptly.</p>
+    </div>
+  </div>
+
+  <div class="sp-links" style="margin-top:8px">
+    <a href="index.html" class="sp-link">← Home</a>
+    <a href="tos.html" class="sp-link">Terms of Service</a>
+  </div>
+</div>
+
+</body>
+</html>
