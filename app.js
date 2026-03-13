@@ -1,4 +1,4 @@
-/* DashAI — app.js  (streaming + blur-fade + smarter link syntax) */
+/* DashAI — app.js */
 const { useState, useEffect, useRef, useCallback } = React;
 
 const MODELS = [
@@ -11,52 +11,50 @@ const CHIPS=['Who are you?','Open YouTube','Search Google for AI','Write a Pytho
 const SAVED_MODEL_KEY='dashai_last_model';
 const IS_MOBILE=()=>/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)||window.innerWidth<680;
 
-const buildSys=(autoOpen)=>`You are Dash, the AI assistant inside DashAI — a browser app that runs AI locally on the user's device.
+/* Keep engine on window so it never gets garbage-collected */
+window._dashEngine=window._dashEngine||null;
 
-YOUR NAME: Dash. If asked who you are or what model you are, say you are Dash, an on-device AI running locally in the browser.
+const buildSys=(autoOpen)=>`You are Dash, the AI assistant inside DashAI — a browser app that runs AI locally on the user's device using WebGPU.
 
-HOW TO OPEN WEBSITES — READ THIS CAREFULLY
-===========================================
-When a user asks you to open, go to, visit, or navigate to any website, you MUST output the URL wrapped in asterisks like this:
+YOUR IDENTITY: Your name is Dash. If asked who you are, what model you are, or who made you, say you are Dash, an on-device AI running locally in the browser.
+
+HOW TO OPEN WEBSITES — CRITICAL, FOLLOW EXACTLY
+=================================================
+When a user asks you to open, go to, visit, or navigate to ANY website, output the URL wrapped in asterisks like this:
 
   *https://website.com*
 
-That is the ONLY syntax DashAI recognises to open a URL. The app reads your response, finds any *URL* patterns, and ${autoOpen ? 'opens them automatically in a new tab.' : 'shows them as a clickable button the user can tap to open.'}
+DashAI scans your message for *URL* patterns and ${autoOpen?'opens them automatically in a new tab.':'shows them as a clickable button.'}
 
-EXAMPLES — follow this pattern exactly:
-- User says "open github"     → you write: Opening GitHub! *https://github.com*
-- User says "go to youtube"   → you write: Here you go *https://youtube.com*
-- User says "search for cats" → you write: Searching now *https://google.com/search?q=cats*
-- User says "open reddit"     → you write: *https://reddit.com*
-- User says "open hacker news"→ you write: *https://news.ycombinator.com*
+EXAMPLES — copy this pattern exactly:
+- "open github"       → Opening GitHub for you! *https://github.com*
+- "go to youtube"     → Here you go *https://youtube.com*
+- "search for dogs"   → Searching now *https://google.com/search?q=dogs*
+- "open reddit"       → *https://reddit.com*
+- "open hacker news"  → *https://news.ycombinator.com*
+- "open twitter"      → *https://twitter.com*
+- "open google maps"  → *https://maps.google.com*
 
 RULES:
-1. ALWAYS use *https://full-url* with asterisks wrapping the full URL
-2. Always include https:// — never bare domains like github.com
-3. Put the URL inline with your message, not isolated on its own line
-4. Never explain the syntax to the user unless they specifically ask how links work
-5. If unsure of exact URL, guess — www.sitename.com works for most sites
+1. ALWAYS use *https://full-url* — asterisks wrapping the FULL URL including https://
+2. Put the URL inline with your message text, not on a separate line by itself
+3. Never describe or explain this syntax unless the user specifically asks how link-opening works
+4. If you are unsure of the exact URL, make a reasonable guess — https://www.sitename.com works for most
 
-CODE
-====
-Always wrap code in fenced blocks with a language tag, e.g.:
+CODE: Wrap all code in fenced blocks with a language identifier:
 \`\`\`python
 # code here
 \`\`\`
 
-STYLE
-=====
-Be concise and natural. Skip filler openers like "Of course!", "Sure!", "Certainly!".
-Use bullets and bold only when genuinely helpful, not for every response.`;
+STYLE: Be concise and direct. Skip filler openers like "Of course!", "Sure!", "Certainly!". Use bullets/bold only when genuinely helpful.`;
 
 const waitWLLM=()=>new Promise(r=>{if(window._wllm)r();else window.addEventListener('wllm',r,{once:true});});
 const hasGPU=()=>!!navigator.gpu;
 const uid=()=>Math.random().toString(36).slice(2,9);
 
-/* Parse response — detect *https://url* and fenced code */
 function parseAI(raw){
   const cmds=[];
-  let text=raw.replace(/\*(https?:\/\/[^\s*]+)\*/g,(_,url)=>{cmds.push(url.trim());return '';});
+  let text=raw.replace(/\*(https?:\/\/[^\s*]+)\*/g,(_,url)=>{cmds.push(url.trim());return'';});
   const segs=[];
   const re=/```(\w*)\r?\n?([\s\S]*?)```/g;
   let last=0,m;
@@ -71,7 +69,6 @@ function parseAI(raw){
   cmds.forEach(u=>segs.push({t:'cmd',v:u}));
   return segs;
 }
-
 function iMd(s){
   return s
     .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
@@ -79,13 +76,24 @@ function iMd(s){
     .replace(/`([^`]+)`/g,'<code>$1</code>');
 }
 
-/* Word-by-word blur fade — renders streaming text token by token */
-const StreamText=React.memo(({text})=>{
+/* ── Word-by-word fade: only NEW words get the animation.
+   We track how many words existed before this render via prevCount ref. ── */
+const StreamText=({text,wordOffset})=>{
   const words=text.split(/(\s+)/);
   return React.createElement(React.Fragment,null,
-    words.map((w,i)=>React.createElement('span',{key:i,className:'wf',dangerouslySetInnerHTML:{__html:w.replace(/\n/g,'<br>')}}))
+    words.map((w,i)=>{
+      const isNew=i>=(wordOffset||0);
+      if(!isNew) return React.createElement('span',{key:i,dangerouslySetInnerHTML:{__html:w.replace(/\n/g,'<br>')}});
+      const delay=Math.min((i-(wordOffset||0))*0.018,0.3);
+      return React.createElement('span',{
+        key:i,
+        className:'wf',
+        style:{animationDelay:`${delay}s`},
+        dangerouslySetInnerHTML:{__html:w.replace(/\n/g,'<br>')}
+      });
+    })
   );
-});
+};
 
 const Loader=({size='loader-md',cls=''})=>React.createElement('div',{className:`loader ${size} ${cls}`},
   React.createElement('div',{className:'inner one'}),
@@ -120,24 +128,17 @@ const CmdBtn=({url})=>{
   );
 };
 
-const Bubble=React.memo(({msg,isLatest,autoOpen,streaming})=>{
-  const autoOpenFiredRef=useRef(false);
-
+const Bubble=React.memo(({msg,isLatest,autoOpen,streaming,prevWordCount})=>{
+  const autoFiredRef=useRef(false);
   useEffect(()=>{
-    if(autoOpen&&isLatest&&!streaming&&msg.role==='ai'&&msg.text&&!autoOpenFiredRef.current){
+    if(autoOpen&&isLatest&&!streaming&&msg.role==='ai'&&msg.text&&!autoFiredRef.current){
       const matches=[...msg.text.matchAll(/\*(https?:\/\/[^\s*]+)\*/g)];
-      if(matches.length){
-        autoOpenFiredRef.current=true;
-        matches.forEach(([,url],idx)=>setTimeout(()=>window.open(url,'_blank'),300+idx*200));
-      }
+      if(matches.length){autoFiredRef.current=true;matches.forEach(([,url],i)=>setTimeout(()=>window.open(url,'_blank'),300+i*200));}
     }
-  },[streaming,autoOpen,isLatest]);
+  },[streaming,autoOpen,isLatest,msg.text]);
 
   if(msg.role==='user')return React.createElement('div',{className:'mrow u'},React.createElement('div',{className:'bub u'},msg.text));
-
-  if(msg.thinking)return React.createElement('div',{className:'mrow a'},
-    React.createElement('div',{className:'bub a think'},React.createElement('div',{className:'dots'},React.createElement('i'),React.createElement('i'),React.createElement('i')))
-  );
+  if(msg.thinking)return React.createElement('div',{className:'mrow a'},React.createElement('div',{className:'bub a think'},React.createElement('div',{className:'dots'},React.createElement('i'),React.createElement('i'),React.createElement('i'))));
 
   const segs=parseAI(msg.text||'');
 
@@ -145,7 +146,9 @@ const Bubble=React.memo(({msg,isLatest,autoOpen,streaming})=>{
     if(s.t==='code')return React.createElement(CodeWidget,{key:i,lang:s.lang,code:s.v});
     if(s.t==='cmd')return React.createElement(CmdBtn,{key:i,url:s.v});
     if(streaming&&isLatest){
-      return React.createElement('div',{key:i,className:'btxt'},React.createElement(StreamText,{text:s.v}));
+      return React.createElement('div',{key:i,className:'btxt'},
+        React.createElement(StreamText,{text:s.v,wordOffset:prevWordCount||0})
+      );
     }
     const lines=s.v.split(/\n/).filter(l=>l.trim());
     return React.createElement('div',{key:i,className:'btxt'},lines.map((ln,j)=>{
@@ -166,38 +169,64 @@ const Bubble=React.memo(({msg,isLatest,autoOpen,streaming})=>{
   );
 });
 
-const Settings=({onClose,theme,setTheme,autoOpen,setAutoOpen,model,onClear,onLoadModel})=>React.createElement('div',{className:'sov',onClick:e=>e.target===e.currentTarget&&onClose()},
-  React.createElement('div',{className:'spanel'},
-    React.createElement('div',{className:'sp-hd'},React.createElement('span',{className:'sp-title'},'Settings'),React.createElement('button',{className:'ibtn',onClick:onClose},React.createElement('span',{className:'material-symbols-outlined'},'close'))),
-    React.createElement('div',{className:'sp-sec'},
-      React.createElement('div',{className:'sp-lbl'},'Appearance'),
-      React.createElement('div',{className:'sp-row'},React.createElement('div',null,React.createElement('div',{className:'sp-rl'},'Light Theme'),React.createElement('div',{className:'sp-rs'},'Switch to light mode')),React.createElement('div',{className:`tog${theme==='light'?' on':''}`,onClick:()=>setTheme(t=>t==='dark'?'light':'dark')}))
-    ),
-    React.createElement('div',{className:'sp-sec'},
-      React.createElement('div',{className:'sp-lbl'},'Browser Control'),
-      React.createElement('div',{className:'sp-row'},React.createElement('div',null,React.createElement('div',{className:'sp-rl'},'Auto-open Links'),React.createElement('div',{className:'sp-rs'},'URLs open automatically when Dash mentions them')),React.createElement('div',{className:`tog${autoOpen?' on':''}`,onClick:()=>setAutoOpen(v=>!v)}))
-    ),
-    React.createElement('div',{className:'sp-sec'},
-      React.createElement('div',{className:'sp-lbl'},'Active Model'),
-      React.createElement('div',{className:'sp-row'},
-        React.createElement('div',null,React.createElement('div',{className:'sp-rl'},model?.name||'No model loaded'),React.createElement('div',{className:'sp-rs'},model?.desc||'Click below to load a model')),
-        model&&React.createElement('span',{className:'sp-model'},React.createElement('span',{className:'material-symbols-outlined'},'memory'),model.size)
+/* ── CACHE CLEAR ── */
+async function clearModelCache(onProgress){
+  try{
+    // Clear all caches (WebLLM stores models in Cache API)
+    const keys=await caches.keys();
+    let cleared=0;
+    for(const k of keys){await caches.delete(k);cleared++;}
+    // Also clear localStorage model key
+    localStorage.removeItem(SAVED_MODEL_KEY);
+    onProgress(`Cleared ${cleared} cache(s) — models will re-download next use.`);
+  }catch(e){
+    onProgress(`Error: ${e.message}`);
+  }
+}
+
+const Settings=({onClose,theme,setTheme,autoOpen,setAutoOpen,model,onClear,onLoadModel,onReload})=>{
+  const[cacheMsg,setCacheMsg]=useState('');
+  const[clearing,setClearing]=useState(false);
+  const doCache=async()=>{
+    setClearing(true);setCacheMsg('Clearing…');
+    await clearModelCache(msg=>{setCacheMsg(msg);setClearing(false);});
+  };
+  return React.createElement('div',{className:'sov',onClick:e=>e.target===e.currentTarget&&onClose()},
+    React.createElement('div',{className:'spanel'},
+      React.createElement('div',{className:'sp-hd'},React.createElement('span',{className:'sp-title'},'Settings'),React.createElement('button',{className:'ibtn',onClick:onClose},React.createElement('span',{className:'material-symbols-outlined'},'close'))),
+      React.createElement('div',{className:'sp-sec'},
+        React.createElement('div',{className:'sp-lbl'},'Appearance'),
+        React.createElement('div',{className:'sp-row'},React.createElement('div',null,React.createElement('div',{className:'sp-rl'},'Light Theme'),React.createElement('div',{className:'sp-rs'},'Switch to light mode')),React.createElement('div',{className:`tog${theme==='light'?' on':''}`,onClick:()=>setTheme(t=>t==='dark'?'light':'dark')}))
       ),
-      !model&&React.createElement('button',{className:'onb-btn primary',style:{width:'100%',marginTop:6},onClick:()=>{onClose();onLoadModel();}},'Load a Model')
-    ),
-    React.createElement('div',{className:'sp-sec'},
-      React.createElement('div',{className:'sp-lbl'},'Danger Zone'),
-      React.createElement('button',{className:'danger-btn',onClick:()=>{onClear();onClose();}},'Clear all conversations')
+      React.createElement('div',{className:'sp-sec'},
+        React.createElement('div',{className:'sp-lbl'},'Browser Control'),
+        React.createElement('div',{className:'sp-row'},React.createElement('div',null,React.createElement('div',{className:'sp-rl'},'Auto-open Links'),React.createElement('div',{className:'sp-rs'},'URLs open automatically when Dash mentions them')),React.createElement('div',{className:`tog${autoOpen?' on':''}`,onClick:()=>setAutoOpen(v=>!v)}))
+      ),
+      React.createElement('div',{className:'sp-sec'},
+        React.createElement('div',{className:'sp-lbl'},'Active Model'),
+        React.createElement('div',{className:'sp-row'},
+          React.createElement('div',null,React.createElement('div',{className:'sp-rl'},model?.name||'No model loaded'),React.createElement('div',{className:'sp-rs'},model?.desc||'Click below to load a model')),
+          model&&React.createElement('span',{className:'sp-model'},React.createElement('span',{className:'material-symbols-outlined'},'memory'),model.size)
+        ),
+        React.createElement('button',{className:'onb-btn primary',style:{width:'100%',marginTop:6},onClick:()=>{onClose();onLoadModel();}},model?'Switch Model':'Load a Model')
+      ),
+      React.createElement('div',{className:'sp-sec'},
+        React.createElement('div',{className:'sp-lbl'},'Danger Zone'),
+        React.createElement('button',{className:'danger-btn',style:{marginBottom:6},onClick:()=>{onClear();onClose();}},'Clear all conversations'),
+        React.createElement('button',{className:'danger-btn',disabled:clearing,onClick:doCache},
+          clearing?'Clearing…':'Clear downloaded model cache'
+        ),
+        cacheMsg&&React.createElement('div',{style:{fontSize:'.73rem',color:'var(--sub)',marginTop:6,lineHeight:1.5}},cacheMsg)
+      )
     )
-  )
-);
+  );
+};
 
 const SLIDES=[
   {icon:null,hed:['Meet ',React.createElement('em',{key:'e'},'DashAI.')],sub:'A fast AI assistant that runs right in your browser — no accounts, no cloud needed after setup.',feats:[{icon:'memory',label:'Runs on Your GPU'},{icon:'wifi_off',label:'Works Offline'},{icon:'tab',label:'Multi-tab Chats'}]},
   {icon:'bolt',hed:['Powered by ',React.createElement('em',{key:'e'},'WebGPU.')],sub:'Your GPU does the work. Same tech as browser games, now running a full language model locally.',feats:[{icon:'speed',label:'Streaming Responses'},{icon:'devices',label:'Chrome & Edge'},{icon:'code',label:'Writes Code'}]},
   {icon:'open_in_new',hed:['Open sites,',React.createElement('em',{key:'e'},' hands-free.')],sub:'Ask Dash to open any website. It figures out the URL and opens it — just say the word.',feats:[{icon:'link',label:'Smart Links'},{icon:'search',label:'Search Anything'},{icon:'bolt',label:'Instant'}]},
 ];
-
 const Onboarding=({onDone})=>{
   const[slide,setSlide]=useState(0);const[key,setKey]=useState(0);
   const go=n=>{setSlide(n);setKey(k=>k+1);};
@@ -239,9 +268,9 @@ const ModelSelect=({onSelect,onSkip,gpuErr})=>React.createElement('div',{classNa
   )
 );
 
-/* ══════════════════════════════════
+/* ══════════════════════════════════════════
    MAIN APP
-══════════════════════════════════ */
+══════════════════════════════════════════ */
 const App=()=>{
   const savedModelId=localStorage.getItem(SAVED_MODEL_KEY);
   const savedModel=savedModelId?MODELS.find(m=>m.id===savedModelId)||null:null;
@@ -257,16 +286,15 @@ const App=()=>{
   const[sets,setSets]=useState(false);
   const[busy,setBusy]=useState(false);
   const[streamingId,setStreamingId]=useState(null);
+  const[streamWordCount,setStreamWordCount]=useState(0); // words present at start of current chunk
   const[model,setModel]=useState(null);
   const[gpuErr,setGpuErr]=useState(false);
 
-  const eng=useRef(null);
   const endR=useRef(null);
   const iRef=useRef(null);
 
   const cur=convs.find(c=>c.id===curId)||convs[0];
   const msgs=cur?.msgs||[];
-  const chatActive=msgs.some(m=>!m.thinking&&m.text);
 
   useEffect(()=>{if(!hasGPU())setGpuErr(true);},[]);
   useEffect(()=>{document.documentElement.classList.toggle('lt',theme==='light');},[theme]);
@@ -279,17 +307,22 @@ const App=()=>{
 
   const initAI=async m=>{
     if(!hasGPU()){setGpuErr(true);return;}
-    setModel(m);setStage('loading');setLmsg('Connecting…');
+    setModel(m);setStage('loading');setLmsg('Connecting…');setLpct(0);
     try{
       await waitWLLM();
       const{CreateMLCEngine}=window.webllm;
-      eng.current=await CreateMLCEngine(m.id,{initProgressCallback:r=>{setLpct(Math.round((r.progress||0)*100));setLmsg(r.text||`Loading ${m.name}…`);}});
+      // Store on window to prevent GC
+      window._dashEngine=await CreateMLCEngine(m.id,{
+        initProgressCallback:r=>{setLpct(Math.round((r.progress||0)*100));setLmsg(r.text||`Loading ${m.name}…`);}
+      });
       localStorage.setItem(SAVED_MODEL_KEY,m.id);
       setStage('main');
       setTimeout(()=>iRef.current?.focus(),120);
     }catch(e){
-      console.error(e);setStage('modelselect');
-      alert(`Failed to load: ${e.message}\n\nTry: chrome://flags/#enable-unsafe-webgpu`);
+      console.error(e);
+      window._dashEngine=null;
+      setStage('modelselect');
+      alert(`Failed to load: ${e.message}\n\nTry enabling WebGPU: chrome://flags/#enable-unsafe-webgpu`);
     }
   };
 
@@ -299,7 +332,8 @@ const App=()=>{
     const text=(override||q).trim();
     if(!text||busy)return;
 
-    if(!eng.current){
+    // Check engine is alive
+    if(!window._dashEngine){
       setQ('');
       if(!msgs.length)setConvs(cs=>cs.map(c=>c.id===curId?{...c,title:text.length>34?text.slice(0,32)+'…':text}:c));
       updateMsgs(curId,m=>[...m,{id:uid(),role:'user',text}]);
@@ -320,7 +354,7 @@ const App=()=>{
         .filter(m=>m.text&&!m.thinking&&m.text!=='__NO_MODEL__')
         .map(m=>({role:m.role==='ai'?'assistant':'user',content:m.text}));
 
-      const stream=await eng.current.chat.completions.create({
+      const stream=await window._dashEngine.chat.completions.create({
         messages:[{role:'system',content:buildSys(autoOpen)},...ctx,{role:'user',content:text}],
         stream:true,
         max_tokens:IS_MOBILE()?400:900,
@@ -329,13 +363,17 @@ const App=()=>{
 
       setStreamingId(tid);
       let acc='';
-      let started=false;
+      let prevWordCount=0;
 
       for await(const chunk of stream){
         const delta=chunk.choices[0]?.delta?.content||'';
         if(!delta)continue;
+
+        // Snapshot word count BEFORE appending new tokens
+        const wordsBefore=acc.split(/(\s+)/).length;
         acc+=delta;
 
+        setStreamWordCount(wordsBefore);
         updateMsgs(curId,m=>{
           const n=[...m];
           const i=n.findIndex(x=>x.id===tid);
@@ -343,15 +381,25 @@ const App=()=>{
           return n;
         });
 
-        // Yield every ~60 chars so the browser can paint and stay responsive
-        if(acc.length%60===0) await new Promise(r=>setTimeout(r,0));
+        // Yield every ~50 chars — keeps mobile UI painting
+        if(acc.length%50===0) await new Promise(r=>setTimeout(r,0));
       }
 
       setStreamingId(null);
+      setStreamWordCount(0);
+
     }catch(e){
-      console.error(e);
+      console.error('Stream error:',e);
       setStreamingId(null);
-      updateMsgs(curId,m=>{const n=[...m];const i=n.findIndex(x=>x.id===tid);if(i!==-1)n[i]={...n[i],thinking:false,text:`⚠️ ${e.message}`};return n;});
+      setStreamWordCount(0);
+      // Check if engine died mid-stream
+      if(e.message&&(e.message.includes('Tokenizer')||e.message.includes('deleted object')||e.message.includes('not loaded'))){
+        window._dashEngine=null;
+        updateMsgs(curId,m=>{const n=[...m];const i=n.findIndex(x=>x.id===tid);if(i!==-1)n[i]={...n[i],thinking:false,text:'⚠️ The model was unloaded. Please reload it from Settings → Load Model.'};return n;});
+        setModel(null);
+      }else{
+        updateMsgs(curId,m=>{const n=[...m];const i=n.findIndex(x=>x.id===tid);if(i!==-1)n[i]={...n[i],thinking:false,text:`⚠️ ${e.message}`};return n;});
+      }
     }
 
     setBusy(false);
@@ -370,7 +418,7 @@ const App=()=>{
     React.createElement('p',{className:'ldr-hint'},'Cached after first download — instant next time.')
   );
 
-  const noModelBanner=!model&&React.createElement('div',{style:{position:'fixed',bottom:'calc(var(--inp) + 8px)',left:'50%',transform:'translateX(-50%)',zIndex:800,whiteSpace:'nowrap'}},
+  const noModelBanner=!window._dashEngine&&React.createElement('div',{style:{position:'fixed',bottom:'calc(var(--inp) + 8px)',left:'50%',transform:'translateX(-50%)',zIndex:800,whiteSpace:'nowrap'}},
     React.createElement('div',{style:{display:'flex',alignItems:'center',gap:8,padding:'7px 14px',borderRadius:10,background:'rgba(168,156,247,.12)',border:'1px solid rgba(168,156,247,.28)',fontSize:'.75rem',color:'var(--ac)',cursor:'pointer'},onClick:()=>setStage('modelselect')},
       React.createElement('span',{className:'material-symbols-outlined',style:{fontSize:15}},'download'),
       'No AI model loaded — tap to load one'
@@ -378,7 +426,11 @@ const App=()=>{
   );
 
   return React.createElement(React.Fragment,null,
-    sets&&React.createElement(Settings,{onClose:()=>setSets(false),theme,setTheme,autoOpen,setAutoOpen,model,onLoadModel:()=>setStage('modelselect'),onClear:()=>{const id=uid();setConvs([{id,title:'Chat 1',msgs:[]}]);setCurId(id);}}),
+    sets&&React.createElement(Settings,{
+      onClose:()=>setSets(false),theme,setTheme,autoOpen,setAutoOpen,model,
+      onLoadModel:()=>setStage('modelselect'),
+      onClear:()=>{const id=uid();setConvs([{id,title:'Chat 1',msgs:[]}]);setCurId(id);}
+    }),
     noModelBanner,
 
     React.createElement('nav',{className:'nav'},
@@ -413,9 +465,9 @@ const App=()=>{
         React.createElement('div',{className:'msgs'},
           msgs.length===0
             ?React.createElement('div',{className:'welcome'},
-                React.createElement('div',{className:'w-loader'},React.createElement(Loader,{size:'loader-xl',cls:model?'pulsing':''})),
+                React.createElement('div',{className:'w-loader'},React.createElement(Loader,{size:'loader-xl',cls:window._dashEngine?'pulsing':''})),
                 React.createElement('h2',{className:'wt'},"Hey, I'm Dash."),
-                React.createElement('p',{className:'ws'},model?'Ask me anything. Open websites. Write code.':'Load a model to get started, or explore the UI first.'),
+                React.createElement('p',{className:'ws'},window._dashEngine?'Ask me anything. Open websites. Write code.':'Load a model to get started, or explore the UI first.'),
                 React.createElement('div',{className:'chips'},CHIPS.map(c=>React.createElement('div',{key:c,className:'chip',onClick:()=>send(c)},c)))
               )
             :React.createElement('div',{className:'mlist'},
@@ -431,7 +483,13 @@ const App=()=>{
                       )
                     )
                   );
-                  return React.createElement(Bubble,{key:msg.id||i,msg,isLatest:i===latestAI,autoOpen,streaming:streamingId===msg.id});
+                  return React.createElement(Bubble,{
+                    key:msg.id||i,msg,
+                    isLatest:i===latestAI,
+                    autoOpen,
+                    streaming:streamingId===msg.id,
+                    prevWordCount:streamingId===msg.id?streamWordCount:0
+                  });
                 }),
                 React.createElement('div',{ref:endR})
               )
@@ -440,7 +498,7 @@ const App=()=>{
           React.createElement('div',{className:'ibar'},
             React.createElement('div',{style:{flexShrink:0,opacity:.5,display:'flex',alignItems:'center'}},React.createElement(Loader,{size:'loader-inp',cls:busy?'pulsing':''})),
             React.createElement('input',{ref:iRef,
-              placeholder:model?'Ask Dash anything…':'No model loaded — tap banner to load one',
+              placeholder:window._dashEngine?'Ask Dash anything…':'No model loaded — tap the banner above',
               value:q,onChange:e=>setQ(e.target.value),onKeyDown:onKey,disabled:busy})
           ),
           React.createElement('button',{className:'sbtn',onClick:()=>send(),disabled:busy||!q.trim()},
