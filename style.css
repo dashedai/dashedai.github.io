@@ -145,8 +145,7 @@ body {
 /* ═══════════════════════════════════════════════
    LAYOUT
 ═══════════════════════════════════════════════ */
-.layout { position:fixed; top:calc(var(--nav) + var(--tabs) + var(--adtop)); left:0; right:0; bottom:0; display:flex }
-.chat-col { flex:1; display:grid; grid-template-rows:1fr var(--inp); min-width:0; overflow:hidden }
+.layout { position:fixed; top:calc(var(--nav) + var(--tabs) + var(--adtop)); left:0; right:0; bottom:0; display:flex; overflow:hidden }
 .ad-col { width:var(--side); flex-shrink:0; border-left:1px solid var(--bd); background:var(--surf); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; padding:14px 10px }
 .ad-block { width:100%; flex:1; border-radius:10px; border:1px dashed var(--bd); display:flex; align-items:center; justify-content:center; color:var(--sub2); font-size:.68rem; font-style:italic }
 .ad-block-sm { width:100%; height:80px; flex-shrink:0; border-radius:8px; border:1px dashed var(--bd); display:flex; align-items:center; justify-content:center; color:var(--sub2); font-size:.65rem; font-style:italic }
@@ -163,9 +162,10 @@ body {
   .chips { gap:6px }
   .chip { font-size:.71rem; padding:5px 11px }
   .ibar input { font-size:.85rem }
-  .mobile-ad-bottom { display:flex; position:fixed; bottom:var(--inp); left:0; right:0; height:48px; background:rgba(10,7,24,.85); border-top:1px dashed rgba(255,255,255,.07); align-items:center; justify-content:center; font-size:.68rem; color:var(--sub2); font-style:italic; z-index:450 }
+  .mobile-ad-bottom { display:flex; position:fixed; bottom:var(--inp); left:0; right:0; height:44px; background:rgba(10,7,24,.85); border-top:1px dashed rgba(255,255,255,.07); align-items:center; justify-content:center; font-size:.67rem; color:var(--sub2); font-style:italic; z-index:450 }
   :root.lt .mobile-ad-bottom { background:rgba(240,240,248,.9) }
-  .layout { bottom:calc(var(--inp) + 48px) }
+  .msgs { padding-bottom:calc(var(--inp) + 44px) }
+  .layout { bottom:0 }
 }
 @media(min-width:681px) { .mobile-ad-bottom { display:none } }
 
@@ -234,8 +234,6 @@ body {
 /* ═══════════════════════════════════════════════
    INPUT
 ═══════════════════════════════════════════════ */
-.inputz { border-top:1px solid var(--bd); background:rgba(10,7,24,.95); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); display:flex; align-items:center; padding:10px 14px; gap:9px }
-:root.lt .inputz { background:rgba(238,238,246,.97) }
 .ibar { flex:1; display:flex; align-items:center; background:var(--gl); border:1px solid var(--bd); border-radius:99px; padding:8px 15px; gap:9px; transition:.18s }
 .ibar:focus-within { border-color:var(--bds); background:var(--glh) }
 .ibar input { flex:1; background:transparent; border:none; outline:none; color:var(--tx); font-size:.89rem; font-family:'DM Sans',sans-serif }
@@ -315,23 +313,49 @@ body {
 .msel-skip { margin-top:16px; font-size:.76rem; color:var(--sub2); cursor:pointer; padding:6px 12px; border-radius:7px; transition:.15s; display:inline-block }
 .msel-skip:hover { color:var(--sub); background:var(--gl) }
 
-/* loading screen */
-.ldr { position:fixed; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:9999; gap:16px }
-.ldr-msg { font-size:.83rem; color:var(--sub); text-align:center; max-width:260px }
-.ptrack { width:210px; height:2.5px; background:var(--gl); border-radius:2px; overflow:hidden }
-.pfill { height:100%; background:var(--ac); transition:width .3s ease }
-.ldr-hint { font-size:.68rem; color:var(--sub2); text-align:center; max-width:230px }
+/* ── LOADING SCREEN — plain spinner, no glow ── */
+.ldr { position:fixed; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:9999 }
+.ptrack { width:180px; height:2px; background:var(--gl); border-radius:2px; overflow:hidden; margin-top:28px }
+.pfill { height:100%; background:var(--ac); transition:width .25s ease }
+.ldr-eta { font-size:.78rem; color:var(--sub); margin-top:10px; font-variant-numeric:tabular-nums }
+
+/* ── NO MODEL BANNER ── */
+.no-model-banner { position:fixed; bottom:calc(var(--inp) + 8px); left:50%; transform:translateX(-50%); z-index:800; pointer-events:none }
+.no-model-pill { display:flex; align-items:center; gap:8px; padding:7px 14px; border-radius:10px; background:rgba(168,156,247,.12); border:1px solid rgba(168,156,247,.28); font-size:.75rem; color:var(--ac); cursor:pointer; white-space:nowrap; pointer-events:all; backdrop-filter:blur(10px) }
+
+/* ── INPUT BAR — fixed bottom, respects visualViewport on mobile ── */
+.inputz {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 600;
+  border-top: 1px solid var(--bd);
+  background: rgba(10,7,24,.97);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  gap: 9px;
+  /* JS will override bottom for keyboard via visualViewport */
+  transition: bottom 0.05s linear;
+}
+:root.lt .inputz { background: rgba(238,238,246,.98) }
+
+/* chat-col no longer uses grid — just fills above the fixed inputz */
+.chat-col { flex:1; display:flex; flex-direction:column; min-width:0; overflow:hidden }
+.msgs { flex:1; overflow-y:auto; padding-bottom: var(--inp) }
 
 /* ── STREAMING WORD FADE ── */
 @keyframes wfIn {
-  0%   { opacity:0; filter:blur(7px); }
-  100% { opacity:1; filter:blur(0px); }
+  0%   { opacity:0; filter:blur(8px); }
+  100% { opacity:1; filter:blur(0); }
 }
 .wf {
   display: inline;
   opacity: 0;
-  animation: wfIn 0.2s ease-out forwards;
-  /* animation-delay is set per-word via inline style */
+  animation: wfIn 0.18s ease-out forwards;
 }
 
 /* Prism */

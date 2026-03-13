@@ -2,12 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>DashAI — On-Device AI Chat</title>
 <meta name="description" content="DashAI chat — private, offline, zero cloud.">
 <meta name="robots" content="noindex">
-<!-- SVG favicon — the DashAI loader sphere -->
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%230a0718'/%3E%3Cellipse cx='32' cy='32' rx='18' ry='28' fill='none' stroke='%23a89cf7' stroke-width='2.5' transform='rotate(-45 32 32)'/%3E%3Cellipse cx='32' cy='32' rx='18' ry='28' fill='none' stroke='%23c8b8ff' stroke-width='2' transform='rotate(45 32 32)'/%3E%3Ccircle cx='32' cy='32' r='6' fill='%23a89cf7' opacity='.7'/%3E%3C/svg%3E">
+<meta name="theme-color" content="#0a0718">
+<!-- Favicon: DashAI loader sphere in SVG (matches the CSS spinner exactly) -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0718'/%3E%3Ccircle cx='32' cy='32' r='16' fill='none' stroke='%23c8b8ff' stroke-width='2.5' stroke-dasharray='25 75' stroke-linecap='round' transform='rotate(-45 32 32)'/%3E%3Ccircle cx='32' cy='32' r='16' fill='none' stroke='%23a89cf7' stroke-width='2.5' stroke-dasharray='25 75' stroke-linecap='round' transform='rotate(70 32 32)'/%3E%3Ccircle cx='32' cy='32' r='16' fill='none' stroke='%23d4c8ff' stroke-width='2' stroke-dasharray='25 75' stroke-linecap='round' transform='rotate(190 32 32)'/%3E%3Ccircle cx='32' cy='32' r='5' fill='%23a89cf7'/%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"/>
@@ -31,7 +32,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-rust.min.js" defer></script>
-<!-- React 18 production builds — smaller + faster than dev -->
+<!-- React 18 production -->
 <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 <script src="app.js"></script>
