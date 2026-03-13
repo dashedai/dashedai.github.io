@@ -662,8 +662,7 @@ const App = () => {
         React.createElement('div',{className:'ad-block'},'ads'),
         React.createElement('div',{className:'ad-block-sm'},'ads')
       )
-    ),
-    React.createElement('div',{className:'mobile-ad-bottom'},'ads go here')
+    )
   );
 };
 
