@@ -304,6 +304,7 @@ body {
 .mcard h4 { font-family:'Syne',sans-serif; font-size:.88rem; font-weight:700; margin-bottom:2px }
 .mcard p { font-size:.71rem; color:var(--sub) }
 .mbadge { font-size:.62rem; font-weight:700; padding:3px 8px; border-radius:99px; white-space:nowrap; flex-shrink:0; margin-left:10px }
+.mb-n { background:rgba(80,220,160,.12); border:1px solid rgba(80,220,160,.25); color:#50dca0 }
 .mb-r { background:var(--ac); color:#07071a }
 .mb-b { background:var(--glh); border:1px solid var(--bds); color:var(--tx) }
 .mb-h { background:rgba(255,100,100,.1); border:1px solid rgba(255,100,100,.2); color:var(--red) }

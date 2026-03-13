@@ -26,9 +26,10 @@ const { useState, useEffect, useRef } = React;
 
 /* ── Model definitions ── */
 const MODELS = [
-  { id:'Llama-3.2-1B-Instruct-q4f16_1-MLC', name:'DashLite', desc:'Fast & efficient · 1.2B params', size:'~700 MB', badge:'Recommended', bc:'mb-r', bytes:700e6 },
-  { id:'Llama-3.2-3B-Instruct-q4f16_1-MLC', name:'DashMid',  desc:'Balanced · 3B params',          size:'~2 GB',   badge:'Balanced',    bc:'mb-b', bytes:2e9   },
-  { id:'Llama-3.1-8B-Instruct-q4f16_1-MLC', name:'DashPro',  desc:'Maximum power · 8B params',     size:'~5 GB',   badge:'Heavy',        bc:'mb-h', bytes:5e9   },
+  { id:'SmolLM2-360M-Instruct-q4f16_1-MLC',  name:'DashNano', desc:'Ultralight · 360M params · best for mobile', size:'~200 MB', badge:'Mobile', bc:'mb-n', bytes:200e6 },
+  { id:'Llama-3.2-1B-Instruct-q4f16_1-MLC',  name:'DashLite', desc:'Fast & light · 1.2B params',                 size:'~700 MB', badge:'Recommended', bc:'mb-r', bytes:700e6 },
+  { id:'Llama-3.2-3B-Instruct-q4f16_1-MLC',  name:'DashMid',  desc:'Balanced · 3B params',                       size:'~2 GB',   badge:'Balanced',    bc:'mb-b', bytes:2e9   },
+  { id:'Llama-3.1-8B-Instruct-q4f16_1-MLC',  name:'DashPro',  desc:'Maximum power · 8B params',                  size:'~5 GB',   badge:'Heavy',        bc:'mb-h', bytes:5e9   },
 ];
 const LANG_EXT = {python:'py',javascript:'js',typescript:'ts',html:'html',css:'css',bash:'sh',json:'json',java:'java',cpp:'cpp',c:'c',rust:'rs',go:'go',ruby:'rb',php:'php',sql:'sql',plaintext:'txt'};
 const CHIPS = ['Who are you?','Open YouTube','Open GitHub','Write a Python scraper','Search for AI news','Explain WebGPU','Show a glass card CSS'];
@@ -613,14 +614,17 @@ const App = () => {
         {role:'user', content:text}
       ];
 
-      /* Switch thinking → streaming (no React re-render during stream) */
+      /* Switch thinking → streaming.
+         CRITICAL ORDER: setStreamId FIRST so React knows to render StreamBubble
+         before updateMsgs fires. If we flip thinking:false first with streamId=null,
+         React renders a Bubble with empty text for one frame (the "paste" glitch). */
       liveTextRef.current = '';
+      setStreamId(tid);
       updateMsgs(curId, m=>{
         const n=[...m]; const i=n.findIndex(x=>x.id===tid);
         if(i!==-1) n[i]={...n[i],thinking:false,text:''};
         return n;
       });
-      setStreamId(tid);
 
       const stream = await window._DE.chat.completions.create({
         messages,
@@ -647,14 +651,16 @@ const App = () => {
         if(tc % prof.yieldEvery === 0) await yieldFrame();
       }
 
-      /* Stream complete — commit to React state, unmount StreamBubble */
-      setStreamId(null);
+      /* Stream complete — commit text FIRST, THEN clear streamId.
+         This way when React re-renders after setStreamId(null),
+         msg.text already has the full content and Bubble renders correctly. */
       liveTextRef.current = '';
       updateMsgs(curId, m=>{
         const n=[...m]; const i=n.findIndex(x=>x.id===tid);
         if(i!==-1) n[i]={...n[i],text:acc};
         return n;
       });
+      setStreamId(null);
 
     } catch(e) {
       console.error(e);
