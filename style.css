@@ -361,3 +361,33 @@ body {
 /* Prism */
 code[class*="language-"],pre[class*="language-"] { background:transparent!important; text-shadow:none!important }
 .token.comment { color:#576070!important }
+
+/* ── PROFILE BADGE in nav ── */
+.profile-badge {
+  width:28px; height:28px; border-radius:7px;
+  display:flex; align-items:center; justify-content:center;
+  background:var(--acd); border:1px solid var(--acb);
+  cursor:default;
+}
+.profile-badge .material-symbols-outlined { font-size:14px; color:var(--ac) }
+
+/* ── MOBILE-PERF: pause all CSS animations while GPU is generating ──
+   This frees the GPU compositor from having to service animation frames,
+   letting WebGPU get the full bandwidth for inference. */
+body.mobile-perf *,
+body.mobile-perf *::before,
+body.mobile-perf *::after {
+  animation-play-state: paused !important;
+  transition: none !important;
+}
+/* Keep the word-fade spans visible when paused */
+body.mobile-perf .wf {
+  opacity: 1 !important;
+  filter: none !important;
+}
+
+/* ── ACTIVE model card highlight in Settings ── */
+.mcard-active {
+  border-color: var(--acb) !important;
+  background: var(--acd2) !important;
+}
