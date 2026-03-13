@@ -349,13 +349,15 @@ body {
 
 /* ── STREAMING WORD FADE ── */
 @keyframes wfIn {
-  0%   { opacity:0; filter:blur(8px); }
-  100% { opacity:1; filter:blur(0); }
+  from { opacity:0; filter:blur(6px); transform:translateY(1px); }
+  to   { opacity:1; filter:blur(0);   transform:translateY(0); }
 }
 .wf {
   display: inline;
   opacity: 0;
-  animation: wfIn 0.18s ease-out forwards;
+  animation: wfIn 0.15s ease-out forwards;
+  /* No animation-delay — words appear as they arrive, not staggered */
+  will-change: opacity, filter;
 }
 
 /* Prism */
@@ -367,27 +369,13 @@ code[class*="language-"],pre[class*="language-"] { background:transparent!import
   width:28px; height:28px; border-radius:7px;
   display:flex; align-items:center; justify-content:center;
   background:var(--acd); border:1px solid var(--acb);
-  cursor:default;
+  cursor:pointer; transition:.15s;
 }
+.profile-badge:hover { background:var(--acd2) }
 .profile-badge .material-symbols-outlined { font-size:14px; color:var(--ac) }
 
-/* ── MOBILE-PERF: pause all CSS animations while GPU is generating ──
-   This frees the GPU compositor from having to service animation frames,
-   letting WebGPU get the full bandwidth for inference. */
-body.mobile-perf *,
-body.mobile-perf *::before,
-body.mobile-perf *::after {
-  animation-play-state: paused !important;
-  transition: none !important;
-}
-/* Keep the word-fade spans visible when paused */
-body.mobile-perf .wf {
-  opacity: 1 !important;
-  filter: none !important;
-}
-
-/* ── ACTIVE model card highlight in Settings ── */
-.mcard-active {
+/* active profile row in settings */
+.sp-row-active {
   border-color: var(--acb) !important;
-  background: var(--acd2) !important;
+  background: var(--acd) !important;
 }
